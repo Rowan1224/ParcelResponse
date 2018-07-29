@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity  {
     private static final String TAG = "MainActivity";
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
     private boolean mAlreadyStartedService = false;
+    String key="1"; //should be updated dynamically
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +56,8 @@ public class MainActivity extends AppCompatActivity  {
                         String longitude = intent.getStringExtra(LocationMonitor.EXTRA_LONGITUDE);
 
                         if (latitude != null && longitude != null) {
-                            Toast.makeText(MainActivity.this,latitude+" "+longitude,Toast.LENGTH_LONG).show();
+//                            Toast.makeText(MainActivity.this,latitude+" "+longitude,Toast.LENGTH_LONG).show();
+                            ApiCall.LocationUpdate(MainActivity.this,latitude,longitude,key);
                            // mMsgView.setText(getString(R.string.msg_location_service_started) + "\n Latitude : " + latitude + "\n Longitude: " + longitude);
                         }
                     }
@@ -95,7 +97,10 @@ public class MainActivity extends AppCompatActivity  {
     private Boolean startStep2(DialogInterface dialog) {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        NetworkInfo activeNetworkInfo = null;
+        if (connectivityManager != null) {
+            activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        }
 
         if (activeNetworkInfo == null || !activeNetworkInfo.isConnected()) {
             promptInternetConnect();
