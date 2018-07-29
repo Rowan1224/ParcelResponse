@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        //Log.d(TAG, "onCreate: "+ApiCall.GET(MainActivity.this));
 
         LocalBroadcastManager.getInstance(this).registerReceiver(
                 new BroadcastReceiver() {
@@ -56,7 +56,8 @@ public class MainActivity extends AppCompatActivity  {
                         String longitude = intent.getStringExtra(LocationMonitor.EXTRA_LONGITUDE);
 
                         if (latitude != null && longitude != null) {
-//                            Toast.makeText(MainActivity.this,latitude+" "+longitude,Toast.LENGTH_LONG).show();
+                            Log.d(TAG, "onReceive: "+latitude+" "+longitude);
+                            Toast.makeText(MainActivity.this,latitude+" "+longitude,Toast.LENGTH_LONG).show();
                             ApiCall.LocationUpdate(MainActivity.this,latitude,longitude,key);
                            // mMsgView.setText(getString(R.string.msg_location_service_started) + "\n Latitude : " + latitude + "\n Longitude: " + longitude);
                         }

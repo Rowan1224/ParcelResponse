@@ -1,6 +1,7 @@
 package com.example.rowan.parcelresponse;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -8,42 +9,70 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class ApiCall {
+    private static final String TAG = "ApiCall";
 
-    public static final String LocationUpdateUrl="192.168.0.104:8080/api/LocationUpdate/";
+    public static final String LocationUpdateUrl = "http://192.168.0.108:8080/api/LocationUpdate/1/";
+    public static final String Task = "http://192.168.0.108:8080/api/TrackingCode/625/";
 
-    public static void LocationUpdate(final Context context, final String Latitude, final String Longitude, String key)
-    {
-        RequestQueue queue= Volley.newRequestQueue(context);
+    public static void LocationUpdate(final Context context, final String Latitude, final String Longitude, String key) {
+        RequestQueue queue = Volley.newRequestQueue(context);
 
-        StringRequest put=new StringRequest(Request.Method.PUT, LocationUpdateUrl+key, new Response.Listener<String>() {
+        StringRequest put = new StringRequest(Request.Method.PUT, LocationUpdateUrl,
+                new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
 
-                Toast.makeText(context,"Updated Successfully",Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Updated Successfully", Toast.LENGTH_SHORT).show();
 
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
 
-                Toast.makeText(context,"Error on Update location",Toast.LENGTH_SHORT).show();
+
+
+                String body="check";
+                //get status code here
+                String statusCode = String.valueOf(error.networkResponse.statusCode);
+                //get response body and parse with appropriate encoding
+                if(error.networkResponse.data!=null) {
+                    try {
+                        body = new String(error.networkResponse.data,"UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                }
+                Log.d(TAG, "onErrorResponse: "+body);
 
             }
-        }){
+        }) {
+
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams() {
 
-                Map<String,String> params=new HashMap<>();
+                Map<String, String> params = new HashMap<String, String>();
 
-                params.put("Latitude",Latitude);
-                params.put("Longitude",Longitude);
+                params.put("employee_id","625");
+                params.put("latitude", Latitude);
+                params.put("longitude", Longitude);
+
+
 
 
                 return params;
@@ -54,6 +83,9 @@ public class ApiCall {
 
         queue.add(put);
     }
+
+
+
 
 
 }
