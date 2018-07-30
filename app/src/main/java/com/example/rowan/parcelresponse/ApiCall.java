@@ -1,5 +1,6 @@
 package com.example.rowan.parcelresponse;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
@@ -12,13 +13,17 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -27,8 +32,13 @@ import java.util.concurrent.TimeoutException;
 public class ApiCall {
     private static final String TAG = "ApiCall";
 
+
     public static final String LocationUpdateUrl = "http://192.168.0.108:8080/api/LocationUpdate/1/";
     public static final String Task = "http://192.168.0.108:8080/api/TrackingCode/625/";
+    public static final String NewParcel = "http://192.168.0.108:8080/api/Parceltemp";
+    public static final String Customer = "http://192.168.0.108:8080/api/CustomerInfo/";
+
+
 
     public static void LocationUpdate(final Context context, final String Latitude, final String Longitude, String key) {
         RequestQueue queue = Volley.newRequestQueue(context);
@@ -83,6 +93,10 @@ public class ApiCall {
 
         queue.add(put);
     }
+
+
+
+
 
 
 

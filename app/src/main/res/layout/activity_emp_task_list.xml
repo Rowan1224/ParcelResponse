@@ -4,16 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".EmpTaskList">
 
-    <Button
-        android:layout_width="80dp"
-        android:layout_height="60dp"
-        android:id="@+id/btntasks"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="205dp"
-        android:text="Tasks" />
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/tasks">
 
+    </ListView>
 
 </RelativeLayout>

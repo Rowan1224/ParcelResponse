@@ -23,6 +23,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity  {
     private static final String TAG = "MainActivity";
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
     private boolean mAlreadyStartedService = false;
+    Button tasks;
     String key="1"; //should be updated dynamically
 
     @Override
@@ -57,14 +59,23 @@ public class MainActivity extends AppCompatActivity  {
 
                         if (latitude != null && longitude != null) {
                             Log.d(TAG, "onReceive: "+latitude+" "+longitude);
-                            Toast.makeText(MainActivity.this,latitude+" "+longitude,Toast.LENGTH_LONG).show();
+                            //Toast.makeText(MainActivity.this,latitude+" "+longitude,Toast.LENGTH_LONG).show();
                             ApiCall.LocationUpdate(MainActivity.this,latitude,longitude,key);
-                           // mMsgView.setText(getString(R.string.msg_location_service_started) + "\n Latitude : " + latitude + "\n Longitude: " + longitude);
+
                         }
                     }
                 }, new IntentFilter(LocationMonitor.ACTION_LOCATION_BROADCAST)
         );
 
+        tasks=(Button)findViewById(R.id.btntasks);
+        tasks.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(MainActivity.this,EmpTaskList.class);
+                intent.putExtra("Code",2);
+                startActivity(intent);
+            }
+        });
 
     }
     @Override
