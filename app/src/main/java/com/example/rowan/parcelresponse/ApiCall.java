@@ -33,14 +33,17 @@ public class ApiCall {
     private static final String TAG = "ApiCall";
 
 
+    public static String EmpId="625";
     public static final String LocationUpdateUrl = "http://192.168.0.108:8080/api/LocationUpdate/1/";
-    public static final String Task = "http://192.168.0.108:8080/api/TrackingCode/625/";
+    public static final String Task = "http://192.168.0.108:8080/api/TrackingCode/"+EmpId;
     public static final String NewParcel = "http://192.168.0.108:8080/api/Parceltemp";
     public static final String Customer = "http://192.168.0.108:8080/api/CustomerInfo/";
+    public static final String UpdateReq = "http://192.168.0.108:8080/api/ParcelUpdate/";
 
 
 
-    public static void LocationUpdate(final Context context, final String Latitude, final String Longitude, String key) {
+    public static void LocationUpdate(final Context context, final String Latitude,
+                                      final String Longitude, String key) {
         RequestQueue queue = Volley.newRequestQueue(context);
 
         StringRequest put = new StringRequest(Request.Method.PUT, LocationUpdateUrl,
@@ -92,6 +95,37 @@ public class ApiCall {
         };
 
         queue.add(put);
+    }
+
+    public static void ParselRequest(final Context context, String pk){
+
+        RequestQueue queue=Volley.newRequestQueue(context);
+        StringRequest update=new StringRequest(Request.Method.PUT, UpdateReq+pk,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(context, "Request Updated", Toast.LENGTH_SHORT).show();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                String body="check";
+                //get status code here
+                String statusCode = String.valueOf(error.networkResponse.statusCode);
+                //get response body and parse with appropriate encoding
+                if(error.networkResponse.data!=null) {
+                    try {
+                        body = new String(error.networkResponse.data,"UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                }
+                Log.d(TAG, "onErrorResponse: "+body);
+
+            }
+        });
+
     }
 
 

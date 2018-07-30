@@ -6,18 +6,29 @@ import java.io.Serializable;
 
 public class TasksDetails implements Serializable {
 
+    @SerializedName("pk") String pk;
     @SerializedName("sender_phone") String phone;
     @SerializedName("receiver_phone")String receiver_phone;
     @SerializedName("tracking_code")String tracking_code;
     @SerializedName("description") String descriptions;
     @SerializedName("destination_code")String destination_code;
 
-    public TasksDetails(String phone, String receiver_phone, String tracking_code, String description, String destination_code) {
+    public String getPk() {
+        return pk;
+    }
+
+    public void setPk(String pk) {
+        this.pk = pk;
+    }
+
+    public TasksDetails(String pk, String phone, String receiver_phone, String tracking_code, String description, String destination_code) {
         this.phone = phone;
         this.receiver_phone = receiver_phone;
         this.tracking_code = tracking_code;
         this.descriptions = description;
         this.destination_code = destination_code;
+        this.pk=pk;
+
     }
 
     public String getPhone() {

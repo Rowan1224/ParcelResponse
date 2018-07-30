@@ -70,6 +70,7 @@ public class EmpTaskList extends AppCompatActivity {
                Intent intent=new Intent(EmpTaskList.this,ProfileORrequest.class);
                intent.putExtra("data",details);
                intent.putExtra("Code",Code);
+               startActivity(intent);
 
            }
        });

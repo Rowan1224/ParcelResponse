@@ -39,7 +39,8 @@ public class ProfileORrequest extends AppCompatActivity {
             @Override
             public void onSuccessResponse(CustomerDetails response) {
 
-                // handle sender info
+
+                Log.d(TAG, "onSuccessResponse: "+"Sender: "+response.getPhone());
 
             }
         },url1);
@@ -49,9 +50,22 @@ public class ProfileORrequest extends AppCompatActivity {
             public void onSuccessResponse(CustomerDetails response) {
 
                 // handle receiver info
+                Log.d(TAG, "onSuccessResponse: "+"Receiver: "+response.getPhone());
 
             }
         },url2);
+
+        if(Code==1)
+        {
+            //change the view of accept-request
+        }
+        else
+        {
+
+            String pk=details.getPk();
+            //if emp accepts the req
+            ApiCall.ParselRequest(ProfileORrequest.this,pk);
+        }
 
 
     }
