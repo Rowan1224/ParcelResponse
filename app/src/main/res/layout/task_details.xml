@@ -9,26 +9,17 @@
         android:text="Task Details"
         android:textSize="26sp"
         android:gravity="center"
-        android:textStyle="italic"
-        android:fontFamily="casual"
-        android:textColor="#2C3E50"/>
 
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="125dp"
-        android:layout_height="88dp"
-        android:layout_below="@+id/taskdetails"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/go" />
+        android:textStyle="italic"
+        android:textColor="#2C3E50"/>
 
     <RelativeLayout
         android:id="@+id/reL1"
-        android:layout_below="@+id/logo"
+        android:layout_below="@+id/taskdetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:paddingLeft="16dp"
-        android:background="#D2DCFB"
         android:layout_marginTop="40dp">
         <TextView
             android:id="@+id/txtmail"
@@ -36,7 +27,6 @@
             android:layout_height="wrap_content"
             android:text="Sender Name"
             android:textSize="18sp"
-            android:fontFamily="casual"
             android:textColor="#000"/>
         <TextView
             android:id="@+id/k1"
@@ -45,16 +35,14 @@
             android:layout_height="wrap_content"
             android:text=":  "
             android:textStyle="bold"
-            android:fontFamily="casual"
             android:textSize="18sp"
             android:textColor="#000"/>
         <TextView
-            android:id="@+id/NameSender"
+            android:id="@+id/txtFmail"
             android:layout_toRightOf="@+id/k1"
             android:layout_width="242dp"
             android:layout_height="wrap_content"
             android:paddingLeft="6dp"
-            android:fontFamily="casual"
             android:text="Rifat"
             android:textSize="18sp" />
     </RelativeLayout>
@@ -65,14 +53,12 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:paddingLeft="16dp"
-        android:background="#C0F7F6"
         android:layout_marginTop="26dp">
         <TextView
             android:id="@+id/txtphone"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:text="Sender Phone"
-            android:fontFamily="casual"
             android:textSize="18sp"
             android:textColor="#000"/>
         <TextView
@@ -82,17 +68,15 @@
             android:layout_height="wrap_content"
             android:text=":  "
             android:textStyle="bold"
-            android:fontFamily="casual"
             android:textSize="18sp"
             android:textColor="#000"/>
         <TextView
-            android:id="@+id/PhoneSender"
+            android:id="@+id/txtFphone"
             android:layout_toRightOf="@+id/k2"
             android:layout_width="242dp"
             android:layout_height="wrap_content"
             android:paddingLeft="6dp"
             android:text="01xxxxxxxxx"
-            android:fontFamily="casual"
             android:textSize="18sp" />
     </RelativeLayout>
     <RelativeLayout
@@ -102,17 +86,14 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:paddingLeft="16dp"
-        android:background="#D2DCFB"
         android:layout_marginTop="26dp">
         <TextView
             android:id="@+id/txtadress"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:text="Receiver Address"
-            android:fontFamily="casual"
+            android:text="Sender Address"
             android:textSize="18sp"
             android:textColor="#000"/>
-
         <TextView
             android:id="@+id/k3"
             android:layout_toRightOf="@+id/txtadress"
@@ -121,38 +102,32 @@
             android:text=":  "
             android:textStyle="bold"
             android:textSize="18sp"
-            android:fontFamily="casual"
             android:textColor="#000"/>
         <TextView
-            android:id="@+id/AddressRec"
+            android:id="@+id/txtFadress"
             android:layout_toRightOf="@+id/k3"
             android:layout_width="242dp"
             android:layout_height="wrap_content"
             android:paddingLeft="6dp"
-            android:fontFamily="casual"
             android:text="Sector-2, Road no 12, House no 33, Dhaka, Bangladesh"
             android:textSize="18sp" />
     </RelativeLayout>
     <RelativeLayout
-
         android:id="@+id/reL4"
         android:layout_below="@+id/reL3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:paddingLeft="16dp"
-        android:background="#C0F7F6 "
         android:layout_marginTop="26dp">
         <TextView
             android:id="@+id/txtprice"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:text="Rec Phone"
-            android:fontFamily="casual"
             android:textSize="18sp"
             android:textColor="#000"/>
         <TextView
-            android:fontFamily="casual"
             android:id="@+id/k4"
             android:layout_toRightOf="@+id/txtprice"
             android:layout_width="wrap_content"
@@ -162,7 +137,7 @@
             android:textSize="18sp"
             android:textColor="#000"/>
         <TextView
-            android:id="@+id/PhoneRec"
+            android:id="@+id/txtFprice"
             android:layout_toRightOf="@+id/k4"
             android:layout_width="242dp"
             android:layout_height="wrap_content"
@@ -172,37 +147,30 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_marginTop="40dp"
-        android:layout_below="@id/reL4"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-
-        >
-        <ImageView
-            android:id="@+id/call"
-            android:layout_width="60dp"
-            android:layout_height="50dp"
-            android:src="@drawable/call"
-            android:layout_toLeftOf="@id/btnAccept"/>
-
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/reL4"
+        android:layout_marginTop="62dp"
+        android:layout_centerHorizontal="true">
 
         <TextView
             android:id="@+id/btnAccept"
-            android:layout_width="180dp"
-            android:layout_height="50dp"
-
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginEnd="79dp"
-
-            android:background="#BFBFF7"
-            android:fontFamily="casual"
-            android:gravity="center"
+            android:layout_width="120dp"
+            android:layout_height="40dp"
+            android:background="@drawable/btn_accept"
             android:text="Accept"
-            android:textSize="18sp"
-            android:textColor="#000"
-            android:textStyle="bold" />
+            android:gravity="center"
+            android:textColor="@color/black"/>
 
+        <TextView
+            android:layout_toRightOf="@+id/btnAccept"
+            android:layout_width="120dp"
+            android:layout_height="40dp"
+            android:background="@drawable/btn_cancel"
+            android:layout_marginLeft="26dp"
+            android:text="Cancel"
+            android:gravity="center"
+            android:textColor="@color/black"/>
 
     </RelativeLayout>
 

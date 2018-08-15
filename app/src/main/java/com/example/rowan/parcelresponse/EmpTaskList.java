@@ -1,11 +1,16 @@
 package com.example.rowan.parcelresponse;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -17,6 +22,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+import com.pusher.pushnotifications.PushNotifications;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -27,21 +34,22 @@ public class EmpTaskList extends AppCompatActivity {
 
     private static String TasksUrl=ApiCall.Task;
     private static String NewParcelUrl=ApiCall.NewParcel;
+    private static final int Activity_Num=0;
     int Code;
     private static final String TAG = "EmpTaskList";
     ListView list;
     public  static List<TasksDetails> results=new ArrayList<TasksDetails>();
+    public static String key="-1";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_emp_task_list);
-        list=(ListView)findViewById(R.id.tasks);
+        list=(ListView)findViewById(R.id.tasklist);
         String url;
 
 
        Code=getIntent().getIntExtra("Code",1);
-
-
+        setupBottomNavigationViewEx(Code);
 
        if(Code==1)
        {
@@ -77,16 +85,14 @@ public class EmpTaskList extends AppCompatActivity {
 
 
 
-
-
-
-
-
-
-
-
-
-
+    }
+    private void setupBottomNavigationViewEx(int item){
+        BottomNavigationViewEx bottomNavigationViewEx= findViewById(R.id.bottomNavViewBar);
+        BottomNavigationViewHelper.setupBottomNavigationViewHelper(bottomNavigationViewEx);
+        BottomNavigationViewHelper.enableNavigation(EmpTaskList.this,bottomNavigationViewEx);
+        Menu menu=bottomNavigationViewEx.getMenu();
+        MenuItem menuItem=menu.getItem(item);
+        menuItem.setChecked(true);
     }
     public static void TasksList(Context context, final VolleyCallback callback,String url)
     {
@@ -99,6 +105,7 @@ public class EmpTaskList extends AppCompatActivity {
             public void onResponse(String response) {
                 Gson gson=new Gson();
                 results= Arrays.asList(gson.fromJson(response,TasksDetails[].class));
+
                 Log.d(TAG, "onResponse: "+results.size());
                 callback.onSuccessResponse(results);
 

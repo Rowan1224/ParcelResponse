@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -22,8 +23,12 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -35,6 +40,12 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+import com.pusher.pushnotifications.PushNotifications;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity  {
 
@@ -42,49 +53,85 @@ public class MainActivity extends AppCompatActivity  {
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
     private boolean mAlreadyStartedService = false;
     Button tasks;
-    String key="1"; //should be updated dynamically
+   public static String key="-1"; //should be updated dynamically
+    public static String active="On Office";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        //Log.d(TAG, "onCreate: "+ApiCall.GET(MainActivity.this));
+        setContentView(R.layout.activity_bottm_tab_1);
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(
-                new BroadcastReceiver() {
-                    @Override
-                    public void onReceive(Context context, Intent intent) {
-                        String latitude = intent.getStringExtra(LocationMonitor.EXTRA_LATITUDE);
-                        String longitude = intent.getStringExtra(LocationMonitor.EXTRA_LONGITUDE);
+        setupBottomNavigationViewEx();
 
-                        if (latitude != null && longitude != null) {
-                            Log.d(TAG, "onReceive: "+latitude+" "+longitude);
-                            //Toast.makeText(MainActivity.this,latitude+" "+longitude,Toast.LENGTH_LONG).show();
-                            ApiCall.LocationUpdate(MainActivity.this,latitude,longitude,key);
 
+
+
+     ApiCall.getInstance(MainActivity.this);
+
+        PushNotifications.start(getApplicationContext(),
+                "17786dda-39c1-4746-a7fc-71e068166850");
+        PushNotifications.subscribe("hello");
+
+        DateFormat df = new SimpleDateFormat("ddMMyyyyHHmm");
+        String date = df.format(Calendar.getInstance().getTime());
+        Log.d(TAG, "onCreate: "+"Time "+date);
+
+
+        if(isNetworkAvailable())
+        {
+
+            LocalBroadcastManager.getInstance(this).registerReceiver(
+                    new BroadcastReceiver() {
+                        @Override
+                        public void onReceive(Context context, Intent intent) {
+                            String latitude = intent.getStringExtra(LocationMonitor.EXTRA_LATITUDE);
+                            String longitude = intent.getStringExtra(LocationMonitor.EXTRA_LONGITUDE);
+
+                            if (latitude != null && longitude != null && !key.equals("-1")) {
+                                Log.d(TAG, "onReceive: "+latitude+" "+longitude);
+
+                                ApiCall.LocationUpdate(MainActivity.this,latitude,longitude,key);
+
+                            }
                         }
-                    }
-                }, new IntentFilter(LocationMonitor.ACTION_LOCATION_BROADCAST)
-        );
+                    }, new IntentFilter(LocationMonitor.ACTION_LOCATION_BROADCAST)
+            );
+        }
 
-        tasks=(Button)findViewById(R.id.btntasks);
-        tasks.setOnClickListener(new View.OnClickListener() {
+
+
+        ImageView scan= (ImageView) findViewById(R.id.btnScan);
+        scan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(MainActivity.this,EmpTaskList.class);
-                intent.putExtra("Code",2);
+                Intent intent=new Intent(MainActivity.this,ScannerActivity.class);
                 startActivity(intent);
             }
         });
 
     }
+
+    private void setupBottomNavigationViewEx(){
+        BottomNavigationViewEx bottomNavigationViewEx= findViewById(R.id.bottomNavViewBar);
+        BottomNavigationViewHelper.setupBottomNavigationViewHelper(bottomNavigationViewEx);
+        BottomNavigationViewHelper.enableNavigation(MainActivity.this,bottomNavigationViewEx);
+        Menu menu=bottomNavigationViewEx.getMenu();
+        MenuItem menuItem=menu.getItem(0);
+        menuItem.setChecked(true);
+    }
+
     @Override
     public void onResume() {
         super.onResume();
 
         startStep1();
     }
-
+    public boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null;
+    }
 
     /**
      * Step 1: Check Google Play services

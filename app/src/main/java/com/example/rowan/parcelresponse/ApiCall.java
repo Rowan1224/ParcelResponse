@@ -14,6 +14,9 @@ import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,25 +36,28 @@ public class ApiCall {
     private static final String TAG = "ApiCall";
 
 
-    public static String EmpId="625";
-    public static final String LocationUpdateUrl = "http://192.168.0.108:8080/api/LocationUpdate/1/";
-    public static final String Task = "http://192.168.0.108:8080/api/TrackingCode/"+EmpId;
-    public static final String NewParcel = "http://192.168.0.108:8080/api/Parceltemp";
-    public static final String Customer = "http://192.168.0.108:8080/api/CustomerInfo/";
-    public static final String UpdateReq = "http://192.168.0.108:8080/api/ParcelUpdate/";
+    public static final String EmpId="emp-625";
+    public static final String URL="http://192.168.0.118:8080/";
+    public static final String LocationUpdateUrl = URL+"api/LocationUpdate/";
+    public static final String Task = URL+"api/TrackingCode/"+EmpId;
+    public static final String NewParcel =URL+ "api/Parceltemp";
+    public static final String Customer = URL+"api/CustomerInfo/";
+    public static final String UpdateReq = URL+"api/ParcelUpdate/";
+    public static final String pk=URL+"api/EmpId/";
+    public static final String Id=URL+"api/UpdateReq/";
 
 
 
     public static void LocationUpdate(final Context context, final String Latitude,
-                                      final String Longitude, String key) {
+                                      final String Longitude, final String key) {
         RequestQueue queue = Volley.newRequestQueue(context);
 
-        StringRequest put = new StringRequest(Request.Method.PUT, LocationUpdateUrl,
+        StringRequest put = new StringRequest(Request.Method.PUT, LocationUpdateUrl+key+'/',
                 new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
 
-                Toast.makeText(context, "Updated Successfully", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(context, "Updated Successfully", Toast.LENGTH_SHORT).show();
 
             }
         }, new Response.ErrorListener() {
@@ -97,10 +103,10 @@ public class ApiCall {
         queue.add(put);
     }
 
-    public static void ParselRequest(final Context context, String pk){
+    public static void ParcelRequest(final Context context, String pk, final Map<String,String> params){
 
         RequestQueue queue=Volley.newRequestQueue(context);
-        StringRequest update=new StringRequest(Request.Method.PUT, UpdateReq+pk,
+        StringRequest update=new StringRequest(Request.Method.PUT, UpdateReq+pk+'/',
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -124,7 +130,98 @@ public class ApiCall {
                 Log.d(TAG, "onErrorResponse: "+body);
 
             }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+            Map<String,String> map=params;
+
+                return map;
+            }
+        };
+
+        queue.add(update);
+
+    }
+
+    public static void getInstance(Context context)
+    {
+        RequestQueue queue =Volley.newRequestQueue(context);
+        StringRequest get=new StringRequest(Request.Method.GET, pk+EmpId, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+               Gson gson=new Gson();
+
+        try {
+            LocationDetails details = Arrays.asList(gson.fromJson(response, LocationDetails[].class)).get(0);
+            MainActivity.key = details.getPk();
+            Log.d(TAG, "onResponse: " + MainActivity.key);
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                String body="check";
+                //get status code here
+                String statusCode = String.valueOf(error.networkResponse.statusCode);
+                //get response body and parse with appropriate encoding
+                if(error.networkResponse.data!=null) {
+                    try {
+                        body = new String(error.networkResponse.data,"UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                }
+                Log.d(TAG, "onErrorResponse: "+body);
+            }
         });
+        queue.add(get);
+    }
+
+    public static void getId(final Context context, String qr)
+    {
+        RequestQueue queue=Volley.newRequestQueue(context);
+        StringRequest get=new StringRequest(Request.Method.GET, Id+qr, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                Map<String,String > params=new HashMap<>();
+                params.put("tracking_code",ApiCall.EmpId);
+                params.put("temporary_parcel","false");
+                JsonParser parser=new JsonParser();
+                JsonArray result= (JsonArray) parser.parse(response);
+                String pk=result.get(0).getAsJsonObject().get("pk").getAsString();
+
+                ApiCall.ParcelRequest(context,pk,params);
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                String body="check";
+                //get status code here
+                String statusCode = String.valueOf(error.networkResponse.statusCode);
+                //get response body and parse with appropriate encoding
+                if(error.networkResponse.data!=null) {
+                    try {
+                        body = new String(error.networkResponse.data,"UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                }
+                Log.d(TAG, "onErrorResponse: "+body);
+
+            }
+        });
+        queue.add(get);
 
     }
 

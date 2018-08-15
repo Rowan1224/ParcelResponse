@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:layout_marginBottom="50dp">
 
-    <Button
-        android:layout_width="80dp"
-        android:layout_height="60dp"
-        android:id="@+id/btntasks"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="205dp"
-        android:text="Tasks" />
+    <ImageView
+
+        android:id="@+id/btnScan"
+        android:layout_width="362dp"
+        android:layout_height="346dp"
+        android:src="@drawable/qrcode"
+        android:layout_centerInParent="true"
+        android:scaleType="fitXY"/>
+
 
 
 </RelativeLayout>
+
